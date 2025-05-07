@@ -1,4 +1,4 @@
-from test import GameEngine, GameWindow, Draw, Input, Sprite
+from test import GameEngine, GameWindow, Draw, Input, Sprite, rects_collide
 from utils import Vector2
 
 window = GameWindow(width=1920, height=1080, title="Game")
@@ -24,10 +24,28 @@ def update(): #직접 업뎃 함수 정의
     else:
         vec = Vector2(0, 0)
 
-    player.move(vec)
+    if input_handler.is_key_pressed("a"):
+        vec2 = Vector2(-1, 0)
+    elif input_handler.is_key_pressed("d"):
+        vec2 = Vector2(1, 0)
+    elif input_handler.is_key_pressed("w"):
+        vec2 = Vector2(0, -1)
+    elif input_handler.is_key_pressed("s"):
+        vec2 = Vector2(0, 1)
+    else:
+        vec2 = Vector2(0, 0)
+
+    if rects_collide(player.get_rect(), gay.get_rect()):
+        player.color = "purple"
+        gay.color = "purple"
+    else:
+        player.color = "blue"
+        gay.color = "red"
+
+    player.update(vec)
     player.draw(canvas)
 
-    gay.move(Vector2(0, 0))
+    gay.update(vec2)
     gay.draw(canvas)
 
     window.update()

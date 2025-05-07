@@ -7,7 +7,7 @@ class Sprite:
         self.color = color
         self.speed = speed
 
-    def move(self, vec):
+    def update(self, vec):
         self.x += vec.x * self.speed
         self.y += vec.y * self.speed
 
