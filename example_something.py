@@ -28,20 +28,23 @@ class Player(Sprite):
         self.bullets = []
         self.shoot_colldown = 3
         self.shoot_timer = 0
+        self.vec = zero
+
+    def qwer(self):
+        if input.is_key_pressed("a"):
+            self.vec.x = -1
+        if input.is_key_pressed("d"):
+            self.vec.x = 1
+        if input.is_key_pressed("w"):
+            self.vec.y = -1
+        if input.is_key_pressed("s"):
+            self.vec.y = 1
+        if input.qwer():
+            self.vec.x = 0
+            self.vec.y = 0
 
     def move(self):
-        if input.is_key_pressed("Left"):
-            vec = left
-        elif input.is_key_pressed("Right"):
-            vec = right
-        elif input.is_key_pressed("Up"):
-            vec = up
-        elif input.is_key_pressed("Down"):
-            vec = down
-        else:
-            vec = zero
-
-        self.update(vec)
+        self.update(self.vec)
         self.draw(canvas)
 
     def shoot(self):
@@ -76,7 +79,7 @@ class Bullet(Sprite):
 
 player_w = 100
 player_h = 100
-player = Player((window_w-player_w)/2, window_h*3/4, player_w, player_h, color="blue", speed=10)
+player = Player((window_w-player_w)/2, window_h*3/4, player_w, player_h, color="blue", speed=15)
 
 def update():
     if input.is_key_pressed("q"):
@@ -92,6 +95,7 @@ def update():
 
     draw.clear()
 
+    player.qwer()
     player.move()
     player.shoot()
     # player.test()

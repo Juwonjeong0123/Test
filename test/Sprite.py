@@ -13,8 +13,8 @@ class Sprite:
 
     def draw(self, canvas):
         canvas.create_rectangle(
-            int(self.x), int(self.y),
-            int(self.x + self.width), int(self.y + self.height),
+            self.x, self.y,
+            self.x + self.width, self.y + self.height,
             fill=self.color
         )
 
