@@ -19,9 +19,6 @@ class Input:
     def is_key_pressed(self, key):
         return key in self.pressed_keys #pressed_keys set에 포함되어 있으면 True를 반환하고, 아니면 False를 반환합니다.
     
-    def qwer(self):
-        return #tlqkf
-    
     def _on_mouse_move(self, event):
         self.mouse_pos = (event.x, event.y)
 

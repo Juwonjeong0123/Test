@@ -39,7 +39,7 @@ class Player(Sprite):
             self.vec.y = -1
         if input.is_key_pressed("s"):
             self.vec.y = 1
-        if input.qwer():
+        if not (input.is_key_pressed("a") or input.is_key_pressed("d") or input.is_key_pressed("w") or input.is_key_pressed("s")):
             self.vec.x = 0
             self.vec.y = 0
 
@@ -107,7 +107,7 @@ def update():
 
     window.update()
 
-engine = GameEngine(update_func=update, fps=fps)
+engine = GameEngine(root, update_func=update, fps=fps)
 engine.start()
 
     
