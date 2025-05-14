@@ -26,25 +26,33 @@ down = Vector2(0, 1)
 zero = Vector2(0, 0)
 
 class Player(Sprite):
-    def __init__(self, x, y, width, height, color="black", speed=1):
+    def __init__(self, x, y, width, height, color="black", speed=1, hp = 1000):
         super().__init__(x, y, width, height, color, speed)
+        self.hp = hp
         self.bullets = []
         self.shoot_colldown = 3
         self.shoot_timer = 0
         self.vec = zero
 
     def qwer(self):
+        self.vec.x = 0
+        self.vec.y = 0
+
+        # 가로 방향
         if input.is_key_pressed("a"):
-            self.vec.x = -1
-        if input.is_key_pressed("d"):
-            self.vec.x = 1
+            if self.x > 0:
+                self.vec.x = -1
+        elif input.is_key_pressed("d"):
+            if self.x + self.width < window_w:
+                self.vec.x = 1
+
+        # 세로 방향
         if input.is_key_pressed("w"):
-            self.vec.y = -1
-        if input.is_key_pressed("s"):
-            self.vec.y = 1
-        if not (input.is_key_pressed("a") or input.is_key_pressed("d") or input.is_key_pressed("w") or input.is_key_pressed("s")):
-            self.vec.x = 0
-            self.vec.y = 0
+            if self.y > 0:
+                self.vec.y = -1
+        elif input.is_key_pressed("s"):
+            if self.y + self.height < window_h:
+                self.vec.y = 1
 
     def move(self):
         self.update(self.vec)
@@ -80,9 +88,29 @@ class Bullet(Sprite):
         else:
             False
 
+class Enemy(Sprite):
+    def __init__(self, x, y, width, height, color="black", speed=1, hp=10000):
+        super().__init__(x, y, width, height, color, speed)
+        self.hp = hp
+
+    def zxcv(self):
+        # self.update()
+        self.draw(canvas)
+
+    def You_Suck(self, bullet):
+        if rects_collide(self.get_rect(), bullet.get_rect()):
+                self.hp -= 10
+
+    def test(self):
+        self.width = 500
+        self.height = 500
+
 player_w = 100
 player_h = 100
-player = Player((window_w-player_w)/2, window_h*3/4, player_w, player_h, color="blue", speed=15)
+enemy_w = 100
+enemy_h = 100
+player = Player((window_w-player_w)/2, window_h*3/4, player_w, player_h, color="blue", speed=15, hp=1000)
+enemy = Enemy((window_w-enemy_w)/2, window_h*1/4, enemy_w, enemy_h, color="red", speed="10", hp=1000)
 
 def update():
     if input.is_key_pressed("q"):
@@ -102,11 +130,15 @@ def update():
     player.move()
     player.shoot()
     # player.test()
+    if enemy.hp <= 0:
+        enemy.test()
+    enemy.zxcv()
 
     player.bullets = [b for b in player.bullets if not b.is_off_screen()]
 
     for bullet in player.bullets:
         bullet.shoot()
+        enemy.You_Suck(bullet)
 
     window.update()
 
