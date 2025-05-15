@@ -9,6 +9,8 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from test import GameEngine, GameWindow, Draw, Input, Sprite, rects_collide
 from utils import Vector2
 
+import random
+
 window_w = 600
 window_h = 800
 
@@ -65,9 +67,12 @@ class Player(Sprite):
         if input.is_key_pressed("space") and self.shoot_timer <= 0:
             size = 30
 
-            bullet = Bullet(self.x + (self.width-size)/2, self.y-50, size, size, color="red", speed=30)
-            bullet.shoot()
+            bullet = Bullet(self.x + (self.width-size)/2, self.y-50, size, size, color="purple", speed=30)
             self.bullets.append(bullet)
+            bullet2 = Bullet((self.x + (self.width-size)/2) - 60, self.y-50, size, size, color="purple", speed=30)
+            self.bullets.append(bullet2)
+            bullet3 = Bullet((self.x + (self.width-size)/2) + 60, self.y-50, size, size, color="purple", speed=30)
+            self.bullets.append(bullet3)
             self.shoot_timer = self.shoot_colldown
 
     """def test(self):
@@ -88,29 +93,61 @@ class Bullet(Sprite):
         else:
             False
 
+class Enemyfactory():
+    def __init__(self):
+        self.enemies = []
+        self.colldown = 20
+        self.timer = 0
+
+    def create_enemy(self):
+        if self.timer > 0:
+            self.timer -= 1
+
+        if self.timer <= 0:
+            w = 50
+            h = 50
+            x = random.randint(0, window_w - w)
+            y = 10
+
+            enemy = Enemy(x, y, w, h, color="red", speed=10, hp=100)
+            self.enemies.append(enemy)
+            self.timer = self.colldown
+
+    def test(self):
+        a = 0
+        for e in self.enemies:
+            a += 1
+        print(a)
+
 class Enemy(Sprite):
-    def __init__(self, x, y, width, height, color="black", speed=1, hp=10000):
+    def __init__(self, x, y, width, height, color="black", speed=10, hp=50):
         super().__init__(x, y, width, height, color, speed)
         self.hp = hp
 
-    def zxcv(self):
-        # self.update()
-        self.draw(canvas)
-
-    def You_Suck(self, bullet):
+    def asdf(self, bullet):
         if rects_collide(self.get_rect(), bullet.get_rect()):
                 self.hp -= 10
 
-    def test(self):
-        self.width = 500
-        self.height = 500
+    def zxcv(self):
+        vec = down
+        self.update(vec)
+        self.draw(canvas)
+
+    def qwer(self):
+        return self.hp <= 0
+    
+    def is_off_screen(self):
+        if self.y > window_h:
+            return True
+        else:
+            False
 
 player_w = 100
 player_h = 100
 enemy_w = 100
 enemy_h = 100
 player = Player((window_w-player_w)/2, window_h*3/4, player_w, player_h, color="blue", speed=15, hp=1000)
-enemy = Enemy((window_w-enemy_w)/2, window_h*1/4, enemy_w, enemy_h, color="red", speed="10", hp=1000)
+enemyfactory = Enemyfactory()
 
 def update():
     if input.is_key_pressed("q"):
@@ -130,15 +167,23 @@ def update():
     player.move()
     player.shoot()
     # player.test()
-    if enemy.hp <= 0:
-        enemy.test()
-    enemy.zxcv()
+
+    # enemyfactory.test()
+    
+    enemyfactory.create_enemy()
 
     player.bullets = [b for b in player.bullets if not b.is_off_screen()]
+    enemyfactory.enemies = [e for e in enemyfactory.enemies if not e.qwer()]
+    enemyfactory.enemies = [e for e in enemyfactory.enemies if not e.is_off_screen()]
 
     for bullet in player.bullets:
         bullet.shoot()
-        enemy.You_Suck(bullet)
+        for enemy in enemyfactory.enemies:
+                enemy.asdf(bullet)
+
+    for enemy in enemyfactory.enemies:
+                enemy.zxcv()
+    
 
     window.update()
 
