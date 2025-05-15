@@ -6,7 +6,7 @@ tracemalloc.start()"""
 import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-from test import GameEngine, GameWindow, Draw, Input, Sprite, rects_collide
+from GameEngineLib import GameEngine, GameWindow, Draw, Input, Sprite, rects_collide
 from utils import Vector2
 
 import random
